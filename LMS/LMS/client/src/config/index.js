@@ -143,5 +143,8 @@ export const filterOptions = {
 };
 
 // Base URL of the backend API. Set VITE_API_URL in Vercel (or a local .env file).
-// Falls back to the local dev server; any trailing slash is removed.
-export const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/+$/, "");
+// If unset: same origin in production (one Vercel project), localhost:5000 in dev.
+// Any trailing slash is removed.
+export const API_URL = (
+  import.meta.env.VITE_API_URL ?? (import.meta.env.PROD ? "" : "http://localhost:5000")
+).replace(/\/+$/, "");
