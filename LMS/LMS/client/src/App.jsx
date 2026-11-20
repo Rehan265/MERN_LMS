@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import AuthPage from "./pages/auth/authPage"
+import AuthPage from "./pages/auth/AuthPage"
 import { Toaster } from "@/components/ui/sonner"
 import RouteGuard from "./components/route-guard/RouteGuard"
 import { useContext, useEffect } from "react"
