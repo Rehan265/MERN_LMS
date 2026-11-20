@@ -1,6 +1,7 @@
 import { courseCurriculumInitialFormData, courseLandingInitialFormData } from '@/config';
 import React, { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import { API_URL } from "@/config";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "sonner"
 
@@ -56,7 +57,7 @@ function InstructorContext({ children }) {
         videoFormData.append("file", selectedFile)
 
 
-        const responce = await axios.post("http://localhost:5000/api/v1/media/upload", videoFormData, {
+        const responce = await axios.post(`${API_URL}/api/v1/media/upload`, videoFormData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -94,7 +95,7 @@ function InstructorContext({ children }) {
   }
 
   const handleOnReplaceVideo = async (publicId, currentIndex) => {
-    const responce = await axios.delete(`http://localhost:5000/api/v1/media/delete/${publicId}`);
+    const responce = await axios.delete(`${API_URL}/api/v1/media/delete/${publicId}`);
 
     if (responce.data.success) {
       let cpyCourceCurriculumFormData = [...courceCurriculumFormData];
@@ -111,7 +112,7 @@ function InstructorContext({ children }) {
       if (selectedFile) {
         const imageFormData = new FormData();
         imageFormData.append("file", selectedFile)
-        const responce = await axios.post("http://localhost:5000/api/v1/media/upload", imageFormData);
+        const responce = await axios.post(`${API_URL}/api/v1/media/upload`, imageFormData);
 
         if (responce.data.success) {
           setLandingFormData({ ...landingFormData, image: responce.data.result.url })
@@ -136,7 +137,7 @@ function InstructorContext({ children }) {
         isPublished: true,
         date: new Date(),
       }
-      const responce = await axios.post("http://localhost:5000/api/v1/instructor/course/", formData)
+      const responce = await axios.post(`${API_URL}/api/v1/instructor/course/`, formData)
       console.log(responce.data);
       if (responce.data.success) {
         setCourceCurriculumFormData([courseCurriculumInitialFormData]);
@@ -154,7 +155,7 @@ function InstructorContext({ children }) {
   const getAllCourses = async (userId) => {
     try {
       setIsLoading(true)
-      const responce = await axios.get(`http://localhost:5000/api/v1/instructor/course/${userId}`);
+      const responce = await axios.get(`${API_URL}/api/v1/instructor/course/${userId}`);
       if (responce.data.success) {
         setCouresList(responce.data.data)
       }
@@ -170,7 +171,7 @@ function InstructorContext({ children }) {
   const getCourseById = async (id) => {
     try {
       setIsLoading(true)
-      const responce = await axios.get(`http://localhost:5000/api/v1/instructor/course/${id}`);
+      const responce = await axios.get(`${API_URL}/api/v1/instructor/course/${id}`);
       if (responce.data.success) {
         console.log(responce.data.data);
         const res = responce.data.data;
@@ -208,7 +209,7 @@ function InstructorContext({ children }) {
 
 
   const handleCourseDelete = async (id) => {
-    const responce = await axios.delete(`http://localhost:5000/api/v1/instructor/course/${id}`)
+    const responce = await axios.delete(`${API_URL}/api/v1/instructor/course/${id}`)
     if (responce.data.success) {
       getAllCourses();
       toast(responce.data.msg);
@@ -227,7 +228,7 @@ function InstructorContext({ children }) {
     try {
       setIsVideoUploading(true)
       setIsVideoUploadingPercentage(0)
-      const responce = await axios.post("http://localhost:5000/api/v1/media/bulk-upload", videoFormData, {
+      const responce = await axios.post(`${API_URL}/api/v1/media/bulk-upload`, videoFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -270,7 +271,7 @@ function InstructorContext({ children }) {
 
     let currentLecture = courceCurriculumFormData[index];
     try {
-      const responce = await axios.delete(`http://localhost:5000/api/v1/media/delete/${currentLecture.public_id}`);
+      const responce = await axios.delete(`${API_URL}/api/v1/media/delete/${currentLecture.public_id}`);
       if (responce.data.success) {
         let cpyCourceCurriculumFormData = courceCurriculumFormData.filter((_, ind) => ind != index)
         setCourceCurriculumFormData([...cpyCourceCurriculumFormData])
@@ -321,7 +322,7 @@ function InstructorContext({ children }) {
         isPublished: courseUpdateData.isPublished,
         date: courseUpdateData.date,
       }
-      const responce = await axios.put(`http://localhost:5000/api/v1/instructor/course/${courseUpdateData._id}`, formData)
+      const responce = await axios.put(`${API_URL}/api/v1/instructor/course/${courseUpdateData._id}`, formData)
       console.log(responce.data);
       if (responce.data.success) {
         setCourceCurriculumFormData([courseCurriculumInitialFormData]);
