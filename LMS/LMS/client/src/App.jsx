@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import AuthPage from "./pages/auth/AuthPage"
 import { Toaster } from "@/components/ui/sonner"
 import RouteGuard from "./components/route-guard/RouteGuard"
@@ -30,6 +30,7 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<Navigate to="/auth" replace />} />
         <Route path="/auth" element={<RouteGuard authenticate={auth.authenticate} element={<AuthPage />} user={auth.user} />} />
         <Route path="/instructor" element={<RouteGuard authenticate={auth.authenticate} element={<InstructorDashboardPage />} user={auth.user} />} />
         <Route path="/instructor/create-new-course" element={<RouteGuard authenticate={auth.authenticate} element={<CreateNewCourse />} user={auth.user} />} />
