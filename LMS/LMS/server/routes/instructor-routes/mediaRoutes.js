@@ -1,5 +1,6 @@
 import express from "express";
 import multer from "multer";
+import os from "os";
 import {
   bulkUploadMedia,
   deleteMedia,
@@ -7,7 +8,7 @@ import {
 } from "../../controllers/instructor-controller/mediaController.js";
 const mediaRouter = express.Router();
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: os.tmpdir() });
 
 mediaRouter.post("/upload", upload.single("file"), uploadMedia);
 mediaRouter.delete("/delete/:id", deleteMedia);

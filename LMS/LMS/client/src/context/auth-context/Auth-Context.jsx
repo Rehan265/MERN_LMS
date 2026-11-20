@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { initialLoginFormData, initialRegisterFormData } from '@/config'
 import axios from 'axios';
+import { API_URL } from "@/config";
 import { toast } from "sonner"
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +26,7 @@ function AuthContext({ children }) {
         try {
             event.preventDefault();
             setIsLoading(true)
-            const responce = await axios.post("http://localhost:5000/api/v1/auth/register", registerFormData);
+            const responce = await axios.post(`${API_URL}/api/v1/auth/register`, registerFormData);
             toast(responce.data.msg);
             if (responce.data.success) {
                 setActiveTab("login");
@@ -42,7 +43,7 @@ function AuthContext({ children }) {
         try {
             event.preventDefault();
             setIsLoading(true)
-            const responce = await axios.post("http://localhost:5000/api/v1/auth/login", loginFormData);
+            const responce = await axios.post(`${API_URL}/api/v1/auth/login`, loginFormData);
             if (responce.data.success) {
                 sessionStorage.setItem("accessToken", responce.data.data.accessToken);
                 setAuth({
@@ -73,7 +74,7 @@ function AuthContext({ children }) {
     const handleCheckAuth = async () => {
         try {
             setAuthIsLoading(true)
-            const responce = await axios.get("http://localhost:5000/api/v1/auth/check-auth", {
+            const responce = await axios.get(`${API_URL}/api/v1/auth/check-auth`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`
                 }

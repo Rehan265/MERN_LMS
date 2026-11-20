@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from "@/config";
 import React, { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from "sonner"
@@ -21,7 +22,7 @@ function StudentContext({ children }) {
     })
 
     try {
-      const responce = await axios.get(`http://localhost:5000/api/v1/student/course?${query}`);
+      const responce = await axios.get(`${API_URL}/api/v1/student/course?${query}`);
       if (responce.data.success) {
         setCouresList(responce.data.data)
       }
@@ -36,7 +37,7 @@ function StudentContext({ children }) {
   const getStudentCouresDetails = async (courseId, studentId) => {
     try {
       setCouresDetail(null)
-      const responce = await axios.get(`http://localhost:5000/api/v1/student/course/${courseId}/${studentId}`);
+      const responce = await axios.get(`${API_URL}/api/v1/student/course/${courseId}/${studentId}`);
       if (responce.data.success) {
         setCouresDetail(responce.data.data);
         console.log(responce.data.data);
@@ -54,7 +55,7 @@ function StudentContext({ children }) {
   const createOrder = async (userId, userName, userEmail, instructorId, instructorName, courseImage, courseTitle, courseId, coursePricing) => {
 
     try {
-      const { data } = await axios.post("http://localhost:5000/api/v1/student/order/create-order/", {
+      const { data } = await axios.post(`${API_URL}/api/v1/student/order/create-order/`, {
         userId: userId,
         userName: userName,
         userEmail: userEmail,
@@ -85,7 +86,7 @@ function StudentContext({ children }) {
   const fetchStudentBoughtCourses = async (studentId) => {
     try {
       setIsLoading(true)
-      const { data } = await axios.get(`http://localhost:5000/api/v1/student/course/bought-courses/${studentId}`);
+      const { data } = await axios.get(`${API_URL}/api/v1/student/course/bought-courses/${studentId}`);
       if (data.success) {
         setStudentBoughtCoursesList(data.data)
       } else {
@@ -104,7 +105,7 @@ function StudentContext({ children }) {
 
   const handleOnCourseNavigate = async (courseId, studentId) => {
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/v1/student/course/check-course-bought-info/${courseId}/${studentId}`)
+      const { data } = await axios.get(`${API_URL}/api/v1/student/course/check-course-bought-info/${courseId}/${studentId}`)
 
       if (data.success) {
         navigate(`/student/student-course-progress/${courseId}`)
@@ -121,7 +122,7 @@ function StudentContext({ children }) {
 
   const handleOnGetCourseProgress = async (courseId, studentId) => {
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/v1/student-course-progress/get/${courseId}/${studentId}`)
+      const { data } = await axios.get(`${API_URL}/api/v1/student-course-progress/get/${courseId}/${studentId}`)
 
       if (data.success) {
         setCouresProgressDetail(data.data)
@@ -137,7 +138,7 @@ function StudentContext({ children }) {
   const handleOnResetCourseProgress = async (courseId, studentId) => {
     try {
 
-      const { data } = await axios.post(`http://localhost:5000/api/v1/student-course-progress/reset-progress/${courseId}/${studentId}`)
+      const { data } = await axios.post(`${API_URL}/api/v1/student-course-progress/reset-progress/${courseId}/${studentId}`)
 
       if (data.success) {
         toast(data.msg)
@@ -151,7 +152,7 @@ function StudentContext({ children }) {
   const handleOnLectureViewed = async (courseId, studentId, lectureId) => {
     try {
 
-      const { data } = await axios.post(`http://localhost:5000/api/v1/student-course-progress/mark-lecture-viewed/${courseId}/${studentId}/${lectureId}`)
+      const { data } = await axios.post(`${API_URL}/api/v1/student-course-progress/mark-lecture-viewed/${courseId}/${studentId}/${lectureId}`)
       if (data.success) {
         toast(data.msg)
         return new Promise((res, rej) => {
